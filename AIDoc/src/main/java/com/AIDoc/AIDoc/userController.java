@@ -1,5 +1,6 @@
 package com.AIDoc.AIDoc;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class userController {
+    @Autowired
     private userService UserService;
 
     @GetMapping("/users")
@@ -22,7 +24,7 @@ public class userController {
     }
   
     @GetMapping("/users/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+    public ResponseEntity<?> getUserById(@PathVariable UUID id) {
       Optional<User> optionUser = UserService.getUserById(id);
   
       if (optionUser.isPresent()) {
@@ -39,7 +41,7 @@ public class userController {
     }
   
     @PutMapping("/users/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+    public ResponseEntity<?> updateUser(@PathVariable UUID id, @RequestBody User updatedUser) {
       // TODO: Finish this function.
       Optional optUser = UserService.getUserById(id);
       if(optUser.isPresent()){
@@ -52,7 +54,7 @@ public class userController {
     }
   
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
       // TODO: Finish this function.
       Optional optUser = UserService.getUserById(id);
       if(optUser.isPresent()){

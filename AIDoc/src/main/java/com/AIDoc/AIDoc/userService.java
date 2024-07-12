@@ -1,45 +1,44 @@
 package com.AIDoc.AIDoc;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 @Service
 public class userService {
-    private final MockDatabase mockDatabase;
+    private final UserMapper userMapper;
 
-    public userService(@Autowired MockDatabase mockDatabase) {
-      this.mockDatabase = mockDatabase;
+    public userService(@Autowired UserMapper userMapper) {
+      this.userMapper = userMapper;
     }
   
     public List<User> getAllUsers() {
-      return mockDatabase.getUsers();
+      return userMapper.findAll();
     }
   
-    public Optional<User> getUserById(Long id) {
-      return mockDatabase.getUserById(id);
+    public Optional<User> getUserById(UUID id) {
+      return Optional.ofNullable(userMapper.findById(id));
     }
   
     public User addUser(User user) {
-      mockDatabase.addUser(user);
+      userMapper.insert(user);;
       return user;
     }
   
-    public Optional<User> updateUser(Long id, User updatedUser) {
+    public Optional<User> updateUser(UUID id, User updatedUser) {
       // TODO: Finish this function.
-      Optional<User> optUser = mockDatabase.getUserById(id);
+      Optional<User> optUser = Optional.ofNullable(userMapper.findById(id));
       if(optUser.isPresent()){
-        return mockDatabase.updateUser(id, updatedUser);
+        userMapper.update(updatedUser);
+        return Optional.of(updatedUser);
       }
       throw new UnsupportedOperationException();
     }
   
-    public void deleteUser(Long id) {
+    public void deleteUser(UUID id) {
       // TODO: Finish this function.
-      if(mockDatabase.getUserById(id).isPresent()){
-        mockDatabase.deleteUser(id);
-      }else{
-        throw new UnsupportedOperationException();
-      }
+      userMapper.delete(id);
+      System.out.println("User:"+id+" is deleted correctly");
     }
 }
