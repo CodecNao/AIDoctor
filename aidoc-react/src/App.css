@@ -1,0 +1,123 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+
+.headLine {
+  text-align: center;
+  font-size: 40px;
+}
+.buttonContainer {
+  align-content:center;
+  justify-content:space-evenly;
+  align-items: stretch;
+  background-color: white;
+}
+.button{
+  background-color: #008CBA;
+  border-radius: 5px;
+  border: none;
+  color: #008CBA;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+.buttonBlue {
+  background-color: #008CBA;
+  color: white;
+}
+.buttonBlue:hover {
+  background-color: white;
+  border-radius: 5px;
+  color: black;
+  border: 2px solid #008CBA;
+}
+.allContainer{
+  display: flex;
+  align-content:center;
+  justify-content:space-evenly;
+  align-items: center;
+  background-color: white;
+  flex-direction: column;
+}
+.searchContainer{
+  display: flex;
+  align-content:center;
+  align-items: center;
+  border-radius: 5px;
+  border: 2px solid #008CBA;
+  background-color: white;
+  width: 300px;
+  justify-content: center;
+  flex-direction: column;
+}
+.searchText{
+  padding: 5px;
+  border: 2px solid #008CBA;
+  border-radius: 5px;
+  display: block;
+  background-color: white;
+}
+.searchTitle{
+  font-size: 20px;
+  text-align: center;
+}
+.footer-space {
+  flex: 1;
+}
+.h1{
+  text-align: center;
+  font-size: 40px;
+}
+.li {
+  padding: 8px;
+  margin-top: 5px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
