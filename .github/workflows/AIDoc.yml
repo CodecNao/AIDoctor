@@ -47,7 +47,7 @@ jobs:
         env:
           ECR_REPOSITORY_URI: ${{ secrets.ECR_REPOSITORY_URI }}
         run: |
-          docker build -t $ECR_REPOSITORY_URI:latest -f ./AIDoc/Dockerfile
+          docker build -t $ECR_REPOSITORY_URI:latest -f AIDoc/Dockerfile AIDoc/
 
       - name: Push Docker image to ECR
         env:
