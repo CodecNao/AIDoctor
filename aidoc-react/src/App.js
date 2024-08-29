@@ -1,7 +1,6 @@
 import logo from './logo.svg';
 import React, { useEffect, useState } from "react";
 import './App.css';
-
 function App() {
   const [users, setUsers] = useState([]);
   const [userId, setUserId] = useState("");
@@ -10,14 +9,14 @@ function App() {
   const [userPhone, setUserPhone] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/users")
+    fetch("https://aidoctor.fly.dev/api/users")
       .then((response) => response.json())
       .then((data) => setUsers(data))
       .catch((error) => console.error("Error:", error));
   }, []);
   const handleCreate = () => {
     if(userEmail!==""){
-      fetch("http://localhost:8080/api/users", {
+      fetch("https://aidoctor.fly.dev/api/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userName: userName, userEmail: userEmail, userPhone: userPhone}),
@@ -34,7 +33,7 @@ function App() {
   };
 
   const handleUpdate = () => {
-    fetch(`http://localhost:8080/api/users/email/${userEmail}`, {
+    fetch(`https://aidoctor.fly.dev/api/users/email/${userEmail}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userName: userName, userEmail: userEmail, userPhone: userPhone}),
@@ -50,7 +49,7 @@ function App() {
   };
 
   const handleDelete = (userEmail) => {
-    fetch(`http://localhost:8080/api/users/email/${userEmail}`, {
+    fetch(`https://aidoctor.fly.dev/api/users/email/${userEmail}`, {
       method: "DELETE",
     })
       .then(() => {
