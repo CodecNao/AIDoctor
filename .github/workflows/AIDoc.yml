@@ -6,11 +6,7 @@ on:
       - main
     paths:
       - "AIDoc/**"
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "AIDoc/**"
+
 
 jobs:
   build:
@@ -21,37 +17,8 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: "17"
-          distribution: "temurin"
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Log in to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build Docker image
+        uses: actions/checkout@v3 
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only api
         env:
-          ECR_REPOSITORY_URI: ${{ secrets.ECR_REPOSITORY_URI }}
-        run: |
-          docker build -t $ECR_REPOSITORY_URI:latest -f AIDoc/Dockerfile AIDoc/
-
-      - name: Push Docker image to ECR
-        env:
-          ECR_REPOSITORY_URI: ${{ secrets.ECR_REPOSITORY_URI }}
-        run: |
-          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPOSITORY_URI
-          docker push $ECR_REPOSITORY_URI:latest
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
