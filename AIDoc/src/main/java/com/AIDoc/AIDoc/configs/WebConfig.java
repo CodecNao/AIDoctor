@@ -1,4 +1,4 @@
-package com.AIDoc.AIDoc;
+package com.AIDoc.AIDoc.configs;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

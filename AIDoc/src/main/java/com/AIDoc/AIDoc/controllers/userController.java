@@ -1,8 +1,8 @@
-package com.AIDoc.AIDoc;
+package com.AIDoc.AIDoc.controllers;
 import java.util.Optional;
 import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,71 +12,83 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.AIDoc.AIDoc.Users.User;
+import com.AIDoc.AIDoc.services.*;
+import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class userController {
-    @Autowired
-    private userService UserService;
-
+    private static final Logger logger = LoggerFactory.getLogger(userController.class);
+    private final userService userService;
+    public userController(userService userService) {
+      this.userService = userService;
+    }
     @GetMapping("/users")
-    public ResponseEntity<?> getAllUsers() {
-      return ResponseEntity.ok(UserService.getAllUsers());
+    public ResponseEntity<List<User>> getAllUsers() {
+      return ResponseEntity.ok(userService.getAllUsers());
     }
  
     @GetMapping("/users/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable UUID id) {
-      Optional<User> optionUser = UserService.getUserById(id);
+    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
+      Optional<User> optionUser = userService.getUserById(id);
   
       if (optionUser.isPresent()) {
+        logger.info("User found:{}", optionUser.get());
         return ResponseEntity.ok(optionUser.get());
       } else {
+        logger.warn("User with ID: {} not found", id);
         return ResponseEntity.notFound().build();
       }
     }
       
     @GetMapping("/users/email/{userEmail}")
-    public ResponseEntity<?> getUserByEmail(@PathVariable("userEmail") String Email) {
-      Optional<User> optionUser = UserService.getUserByEmail(Email);
+    public ResponseEntity<User> getUserByEmail(@PathVariable("userEmail") String Email) {
+      Optional<User> optionUser = userService.getUserByEmail(Email);
   
       if (optionUser.isPresent()) {
+        logger.info("User found:{}", optionUser.get());
         return ResponseEntity.ok(optionUser.get());
       } else {
+        logger.warn("User with Email: {} not found", Email);
         return ResponseEntity.notFound().build();
       }
     }
   
     @PostMapping("/users")
-    public ResponseEntity<?> createUser(@RequestBody User user) {
-      User createdUser = UserService.addUser(user);
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+      User createdUser = userService.addUser(user);
+      logger.info("User created: {}", createdUser.getUserEmail());
       return ResponseEntity.ok(createdUser);
     }
   
     @PutMapping("/users/email/{userEmail}")
-    public ResponseEntity<?> updateUser(@PathVariable("userEmail") String Email, @RequestBody User updatedUser) {
+    public ResponseEntity<User> updateUser(@PathVariable("userEmail") String Email, @RequestBody User updatedUser) {
       // TODO: Finish this function.
-      Optional<User> optUser = UserService.getUserByEmail(Email);
+      Optional<User> optUser = userService.getUserByEmail(Email);
       if(optUser.isPresent()){
         User getUser = optUser.get();
-        if(updatedUser.getUserName()==null){
+        if(updatedUser.getUserName()!=null){
           updatedUser.setUserName(getUser.getUserName());
         }
-        if(updatedUser.getUserPhone()==null){
+        if(updatedUser.getUserPhone()!=null){
           updatedUser.setUserPhone(getUser.getUserPhone());
         }
-        if(updatedUser.getUserEmail()==null){
+        if(updatedUser.getUserEmail()!=null){
           updatedUser.setUserEmail(Email);
         }
-        optUser = UserService.updateUser(Email, updatedUser);
+        optUser = userService.updateUser(Email, updatedUser);
+        logger.info("User updated: {}", Email);
         return ResponseEntity.ok(optUser.get());
       }
       else{
+        logger.warn("User with Email: {} not found", Email);
         return ResponseEntity.notFound().build();
       }
     }
       @PutMapping("/users/{id}")
-      public ResponseEntity<?> updateUserByID(@PathVariable UUID id, @RequestBody User updatedUser) {
+      public ResponseEntity<User> updateUserByID(@PathVariable UUID id, @RequestBody User updatedUser) {
         // TODO: Finish this function.
-        Optional<User> optUser = UserService.getUserById(id);
+        Optional<User> optUser = userService.getUserById(id);
         if(optUser.isPresent()){
           User getUser = optUser.get();
           if(updatedUser.getUserName()==null){
@@ -88,7 +100,10 @@ public class userController {
           if(updatedUser.getUserEmail()==null){
             updatedUser.setUserEmail(getUser.getUserEmail());
           }
-          optUser = UserService.updateUserById(id, updatedUser);
+          if(updatedUser.getUserPassword()==null){
+            updatedUser.setUserPassword(getUser.getUserPassword());
+          }
+          optUser = userService.updateUserById(id, updatedUser);
           return ResponseEntity.ok(optUser.get());
         }
       else{
@@ -97,24 +112,18 @@ public class userController {
     }
   
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
-      // TODO: Finish this function.
-      Optional optUser = UserService.getUserById(id);
-      if(optUser.isPresent()){
-        UserService.deleteUser(id);
-        return ResponseEntity.ok(optUser.get());
-      }
-      else{
-        return ResponseEntity.notFound().build();
-      }
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
+      userService.deleteUser(id);
+      return ResponseEntity.ok().build();
     }
     @DeleteMapping("/users/email/{userEmail}")
-    public ResponseEntity<?> deleteUserbyEmail(@PathVariable("userEmail") String Email) {
+    public ResponseEntity<Void> deleteUserbyEmail(@PathVariable("userEmail") String Email) {
       // TODO: Finish this function.
-      Optional optUser = UserService.getUserByEmail(Email);
+      Optional optUser = userService.getUserByEmail(Email);
       if(optUser.isPresent()){
-        UserService.deleteUserfromEmail(Email);
-        return ResponseEntity.ok(optUser.get());
+        userService.deleteUserfromEmail(Email);
+        logger.info("User with Email: {} deleted", Email);
+        return ResponseEntity.ok().build();
       }
       else{
         return ResponseEntity.notFound().build();

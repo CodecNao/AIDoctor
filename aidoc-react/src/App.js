@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import React, { useEffect, useState } from "react";
 import './App.css';
 function App() {
@@ -85,9 +84,10 @@ function App() {
         </div>
       </div>
       <ul>
+        
         {users.map((user) => (
           <li key={user.userEmail}>
-            {user.userEmail} ({user.userId} {user.userName} {user.userPhone})
+            {user.userEmail} ( {user.userName} {user.userPhone})
             <button onClick={() => handleDelete(user.userEmail)}>Delete</button>
           </li>
         ))}

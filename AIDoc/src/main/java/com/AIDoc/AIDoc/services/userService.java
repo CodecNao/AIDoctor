@@ -1,10 +1,12 @@
-package com.AIDoc.AIDoc;
+package com.AIDoc.AIDoc.services;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.AIDoc.AIDoc.mappers.*;
+import com.AIDoc.AIDoc.Users.*;
 @Service
 public class userService {
     private final UserMapper userMapper;
